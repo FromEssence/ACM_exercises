@@ -1,10 +1,8 @@
 /** ZOJ 1649*/
 /*
-WA
-reason:tmptime should be initialized in the for loop.
-       And it seems the test cases don't contain the situation that there are more than one friend.
-*/   
-
+AC 40MS
+Attention: This code takes the situation that there are more than one friend into consideration.
+*/
 #include <iostream>
 #include <cstring>
 #include <queue>
@@ -20,13 +18,15 @@ struct state{
 	int x, y;
 	int dis = 0;
 	state(){};
-	state(int xx, int yy, int d=0){x=xx, y=yy, dis=d;}
+	state(int xx, int yy, int d){x=xx, y=yy, dis=d;}
 };
 ///
 int main(){
 	int n, m;
 	int sx, sy, ex, ey;
 	while(cin >> n>> m ){
+        queue<state> Q;
+		while(!Q.empty()) Q.pop();
 		for(int i=0; i<maxsize; i++)
 		{
 			for(int j=0; j<maxsize; j++)
@@ -47,12 +47,12 @@ int main(){
 				{
 					sx = i, sy = j;
 					mindis[sx][sy] = 0;
+					Q.push(state(sx, sy, 0));
 				}
 			}
 		}
-		queue<state> Q;
-		while(!Q.empty()) Q.pop();
-		Q.push(state(sx, sy, 0));
+
+		//Q.push(state(sx, sy, 0));
 		//int step = 0;
 		while(!Q.empty())
 		{
@@ -61,11 +61,12 @@ int main(){
 			//{
 			//	mindis[ex][ey] = min(mindis[ex][ey], tmp.dis);
 			//}
-			int tmptime = tmp.dis+1;
+
 			for(int k=0; k<4; k++)
 			{
 				int tmpx = tmp.x + dir[k][0];
 				int tmpy = tmp.y + dir[k][1];
+				int tmptime = tmp.dis+1;
 				//int tmpst = step;
 				if(tmpx >= 0 && tmpx < n && tmpy >= 0 && tmpy < m && gra[tmpx][tmpy] != '#')
 				{
